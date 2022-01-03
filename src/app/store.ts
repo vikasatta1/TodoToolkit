@@ -13,12 +13,14 @@ const rootReducer = combineReducers({
     app: appReducer,
     auth: authReducer
 })
+
+export type RootReducerType = typeof rootReducer
 export const store = configureStore({
     reducer:rootReducer,
     middleware:(getDefaultMiddleware) => getDefaultMiddleware().prepend(thunkMiddleware)
 })
 
-export type AppRootStateType = ReturnType<typeof rootReducer>
+export type AppRootStateType = ReturnType<RootReducerType>
 
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
