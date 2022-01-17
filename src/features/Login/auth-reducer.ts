@@ -1,13 +1,13 @@
 import {Dispatch} from 'redux'
 import {setAppStatusAC} from '../../app/app-reducer'
-import {authAPI, LoginParamsType} from '../../api/todolists-api'
+import {authAPI, FieldErrorType, LoginParamsType} from '../../api/todolists-api'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
 
 export const loginTC = createAsyncThunk<{isLoggedIn:boolean},LoginParamsType,{
-    rejectValue:{errors:Array<string>,fieldsErrors}
+    rejectValue:{errors:Array<string>,fieldsErrors?:Array<FieldErrorType>}
 }>('auth/login', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
 
@@ -21,7 +21,7 @@ export const loginTC = createAsyncThunk<{isLoggedIn:boolean},LoginParamsType,{
         } else {
             handleServerAppError(res.data, thunkAPI.dispatch)
             // @ts-ignore
-            return thunkAPI.rejectWithValue({errors:res.data.messages, fieldsErrors: res.data.fieldErrors})
+            return thunkAPI.rejectWithValue({errors:res.data.messages, fieldsErrors: res.data.fieldsErrors})
         }
     } catch (err) {
     // @ts-ignore

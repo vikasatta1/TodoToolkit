@@ -37,9 +37,10 @@ export const Login = () => {
         },
         onSubmit:async( values,formikHelpers:FormikHelpers<FormikValuesType> )=> {
           const action = await  dispatch(loginTC(values));
-          if(action.type === loginTC.rejected.type){
-              if(action.payload.fieldsErrors){
-                  formikHelpers.setFieldError('emeal', 'fakeError ')
+          if(loginTC.rejected.match(action)){
+              if(action.payload?.fieldsErrors?.length){
+                  const error = action.payload?.fieldsErrors[0]
+                  formikHelpers.setFieldError(error.field, error.error)
               }else {
 
               }
